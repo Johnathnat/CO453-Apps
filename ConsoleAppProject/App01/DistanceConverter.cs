@@ -10,5 +10,38 @@ namespace ConsoleAppProject.App01
     /// </author>
     public class DistanceConverter
     {
+        private double miles, feet:
+        
+        public void Run()
+        {
+            OutputHeading();
+            InputMiles();
+            CalcualteFet();
+            OutputFeet();
+        }
+        public void OutputHeading();
+        {
+            Console.WriteLine("-----------------")
+            Console.WriteLine("-App01  Distance-")
+            Console.WriteLine("----Converter----")
+            Console.WriteLine("-----------------")
+        }
+        
+       
+        public void InputMiles();
+        {
+            
+        }
+        
+        public void CalcualteFet();
+        {
+            
+        }
+        
+        
+        public void OutputFeet();
+        {
+            
+        }
     }
 }

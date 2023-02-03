@@ -10,6 +10,7 @@ namespace ConsoleAppProject.App01
     /// </author>
     public class DistanceConverter
     {
+        public static double FEET_IN_MILES = 5280;
         private double miles, feet:
         
         public void Run()

@@ -35,6 +35,18 @@ public class BMICalculator {
         Scanner scanner = new Scanner(System.in);
 
         // Displays a Welcome message and a table from the WHO showing the meaning of different BMI values
+        System.out.println("""
+                --------------------------------------------
+                BNU CO453 Applications Programming 2022-2023
+                --------------------------------------------
+                                
+                ===========================
+                   App02 BMI Converter
+                      By John Barker
+                ===========================
+                                
+                                
+                """);
         System.out.println("Welcome to the BMI calculator!");
         System.out.println("""
                     

@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+
+
+
 public class GradeCalculator {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -19,6 +22,10 @@ public class GradeCalculator {
             String name = input.next();
             studentNames[i] = name;
             System.out.print("Enter the mark for student " + name + ": ");
+            while (!input.hasNextInt()) {  // Validate input as integer
+                System.out.print("Please enter a valid integer: ");
+                input.next();
+            }
             int mark = input.nextInt();
             studentMarks[i] = mark;
             studentGrades[i] = getGrade(mark);
@@ -26,13 +33,18 @@ public class GradeCalculator {
 
         // Calculate mean mark of the group
         double sum = 0.0;
+        int highestMarkIndex = 0;
+        int lowestMarkIndex = 0;
         for (int i = 0; i < numStudents; i++) {
             sum += studentMarks[i];
+            if (studentMarks[i] > studentMarks[highestMarkIndex]) {
+                highestMarkIndex = i;
+            }
+            if (studentMarks[i] < studentMarks[lowestMarkIndex]) {
+                lowestMarkIndex = i;
+            }
         }
         double meanMark = sum / numStudents;
-
-        // Display mean mark
-        System.out.println("\nMean mark of the group: " + meanMark);
 
         // Calculate grade profile
         int[] gradeCounts = new int[5];
@@ -59,13 +71,20 @@ public class GradeCalculator {
         }
 
         // Display grade profile with classification
-        // Display grade profile with classification
         System.out.println("\nGrade Profile:");
         System.out.println("Name\tGrade\tPercentage\tClassification");
         for (int i = 0; i < numStudents; i++) {
             System.out.println(studentNames[i] + "\t" + studentGrades[i] + "\t" + getGradePercentage(studentGrades[i], gradeCounts, numStudents) + "%\t\t" + getGradeClassification(studentGrades[i]));
         }
-    }
+
+    // Display mean mark
+        System.out.println("\nMean mark of the group: " + meanMark);
+    // Display student with highest mark
+        System.out.println("\nStudent with highest mark: " + studentNames[highestMarkIndex] + " (" + studentMarks[highestMarkIndex] + ")");
+
+    // Display student with lowest mark
+        System.out.println("Student with lowest mark: " + studentNames[lowestMarkIndex] + " (" + studentMarks[lowestMarkIndex] + ")");
+}
 
     // Function to calculate grade from mark
     public static String getGrade(int mark) {

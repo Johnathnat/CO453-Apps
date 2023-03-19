@@ -1,15 +1,39 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
+import static java.lang.Math.round;
 
 
 public class GradeCalculator {
+static int maxMark;
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
         // Get number of students
         System.out.print("Enter the number of students: ");
-        int numStudents = input.nextInt();
+        int numStudents = 0;
+        while (true) {
+            try {
+                numStudents = input.nextInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number");
+                input.next();
+            }
+        }
+
+        System.out.println("Enter Maximum possible mark");
+        int maxMark = 0;
+        while (true) {
+            try {
+                maxMark = input.nextInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number");
+                input.next();
+            }
+        }
+
 
         /**Initialize arrays
          * This code initializes three arrays of different data types for a number of students specified by the variable numStudents.
@@ -67,7 +91,7 @@ public class GradeCalculator {
          *
          * */
         for (int i = 0; i < numStudents; i++) {
-            System.out.print("Enter the name of student " + (i+1) + ": ");
+            System.out.print("Enter the name of student " + (i + 1) + ": ");
             String name = input.next();
             studentNames[i] = name;
             System.out.print("Enter the mark for student " + name + ": ");
@@ -75,9 +99,29 @@ public class GradeCalculator {
                 System.out.print("Please enter a valid integer: ");
                 input.next();
             }
-            int mark = input.nextInt();
-            studentMarks[i] = mark;
-            studentGrades[i] = getGrade(mark);
+
+            boolean scoreCheck = false;
+            double score;
+            while (scoreCheck == false) {
+                score = input.nextInt();
+
+                if (score < 0) {
+                    System.out.println("Please enter a positive integer");
+                }
+                else if (score > maxMark) {
+                    System.out.println("Please enter an integer no higher than"+maxMark);
+                }
+                else {
+
+                    int mark= (int) round(score/maxMark*100);
+                    System.out.println("Percentage mark:  "+mark+"%");
+                    studentMarks[i] = mark;
+                    studentGrades[i] = getGrade(mark);
+                    scoreCheck = true;
+                }
+            }
+
+
         }
 
         /**Calculate mean mark of the group
@@ -175,21 +219,21 @@ public class GradeCalculator {
          * and how it compares to the rest of the class.
          * */
         System.out.println("\nGrade Profile:");
-        System.out.println("Name\tGrade\tPercentage\tClassification");
+        System.out.println("Name\tGrade\tProportion\tClassification");
         for (int i = 0; i < numStudents; i++) {
             System.out.println(studentNames[i] + "\t" + studentGrades[i] + "\t" + getGradePercentage(studentGrades[i], gradeCounts, numStudents) + "%\t\t" + getGradeClassification(studentGrades[i]));
         }
 
     /** Display mean mark
      * The mean mark of the group is printed using the value stored in the meanMark variable*/
-        System.out.println("\nMean mark of the group: " + meanMark);
+        System.out.println("\nMean percentage mark of the group: " + meanMark);
     /** Display student with highest mark
      * The student with the highest mark is identified by looking up the index of
      * the studentMarks array that contains the highest mark. The program then prints
      * the name and mark of this student using the highestMarkIndex to look up the values
      * in the studentNames and studentMarks arrays.
      * */
-        System.out.println("\nStudent with highest mark: " + studentNames[highestMarkIndex] + " (" + studentMarks[highestMarkIndex] + ")");
+        System.out.println("\nStudent with highest percentage mark: " + studentNames[highestMarkIndex] + " (" + studentMarks[highestMarkIndex] + "%)");
 
     /** Display student with lowest mark
      * the student with the lowest mark is identified by looking up the
@@ -197,23 +241,21 @@ public class GradeCalculator {
      * program then prints the name and mark of this student using the
      * lowestMarkIndex to look up the values in the studentNames and
      * studentMarks arrays.*/
-        System.out.println("Student with lowest mark: " + studentNames[lowestMarkIndex] + " (" + studentMarks[lowestMarkIndex] + ")");
+        System.out.println("Student with lowest percentage mark: " + studentNames[lowestMarkIndex] + " (" + studentMarks[lowestMarkIndex] + "%)");
 }
 
     /** Function to calculate grade from mark
-     * This code defines a function getGradePercentage that takes three arguments:
-     * grade, which is a string representing the letter grade (e.g., "A", "B", "C", etc.);
-     * gradeCounts, which is an array of integers representing the number of students who received each grade;
-     * and numStudents, which is an integer representing the total number of students in the class.
-     *
-     * The function uses a switch statement to determine which grade is being passed in, and then calculates
-     * and returns the percentage of students who received that grade. The percentage is calculated by dividing
-     * the number of students who received that grade (looked up in the gradeCounts array) by the total number
-     * of students in the class (stored in the numStudents variable), and then multiplying by 100.
-     *
-     * If the grade argument passed to the function is not one of the expected values ("A", "B", "C", "D", "F"), the function returns 0.0.
-     * */
+     * This is a function called getGrade that takes in a student's mark as an integer and returns their letter grade as a string.
+
+     * It does this by checking the mark against different grade thresholds, starting from the highest grade (A) and working down to
+     * the lowest grade (F). If the mark is greater than or equal to the threshold for a particular grade, then that grade is returned.
+
+     * If the mark is below the threshold for an F grade, then an F grade is returned.*/
+
     public static String getGrade(int mark) {
+        //mark = mark/maxMark*100;
+
+
         if (mark >= 70) {
             return "A";
         } else if (mark >= 60) {
@@ -227,24 +269,34 @@ public class GradeCalculator {
         }
     }
     /** Function to get grade percentage
-     * This is a function called getGrade that takes in a student's mark as an integer and returns their letter grade as a string.
+     * This code defines a function getGradePercentage that takes three arguments:
+     * grade, which is a string representing the letter grade (e.g., "A", "B", "C", etc.);
+     * gradeCounts, which is an array of integers representing the number of students who received each grade;
+     * and numStudents, which is an integer representing the total number of students in the class.
 
-     * It does this by checking the mark against different grade thresholds, starting from the highest grade (A) and working down to
-     * the lowest grade (F). If the mark is greater than or equal to the threshold for a particular grade, then that grade is returned.
-
-     * If the mark is below the threshold for an F grade, then an F grade is returned.*/
+     * The function uses a switch statement to determine which grade is being passed in, and then calculates
+     * and returns the percentage of students who received that grade. The percentage is calculated by dividing
+     * the number of students who received that grade (looked up in the gradeCounts array) by the total number
+     * of students in the class (stored in the numStudents variable), and then multiplying by 100.
+     * If the grade argument passed to the function is not one of the expected values ("A", "B", "C", "D", "F"), the function returns 0.0.
+     */
     public static double getGradePercentage(String grade, int[] gradeCounts, int numStudents) {
         switch(grade) {
             case "A":
-                return 100.0 * gradeCounts[0] / numStudents;
+                double gradePercent0=100.0 * gradeCounts[0] / numStudents;
+                return gradePercent0;
             case "B":
-                return 100.0 * gradeCounts[1] / numStudents;
+                double gradePercent1=100.0 * gradeCounts[1] / numStudents;
+                return gradePercent1;
             case "C":
-                return 100.0 * gradeCounts[2] / numStudents;
+                double gradePercent2=100.0 * gradeCounts[2] / numStudents;
+                return gradePercent2;
             case "D":
-                return 100.0 * gradeCounts[3] / numStudents;
+                double gradePercent3=100.0 * gradeCounts[3] / numStudents;
+                return gradePercent3;
             case "F":
-                return 100.0 * gradeCounts[4] / numStudents;
+                double gradePercent4=100.0 * gradeCounts[4] / numStudents;
+                return gradePercent4;
             default:
                 return 0.0;
         }

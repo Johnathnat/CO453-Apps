@@ -9,7 +9,13 @@ static int maxMark;
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        // Get number of students
+        /** Get number of students and maximum possible mark
+         * At the beginning of hte program the user is prompted for the number of students.  This section of code
+         * validates that the number entered is an integer.
+         *
+         * The user is then prompted for the maximum possible mark which is then validated to be an integer and is used
+         * later to convert the student score into a percentage mark.
+         * */
         System.out.print("Enter the number of students: ");
         int numStudents = 0;
         while (true) {
@@ -99,7 +105,20 @@ static int maxMark;
                 System.out.print("Please enter a valid integer: ");
                 input.next();
             }
-
+        /**  Score Validation and Percentage Mark Calculation
+         * This section of code is to check if the student score is >0 or < or equal to the maximum mark.
+         * It begins by declaring the scoreCheck boolean variable as false to allow the validation to run.
+         * The score variable is then defined.
+         * While the scoreCheck variable is false the code will be repeated and ask for a score to be inputted.
+         * If the score is<0 then an error message is displayed and the user prompted to re-enter the score.
+         * Likewise if the score is < maximum mark, an error message is displayed that also states what the maximum mark is.
+         *
+         * When the user enters a valid score it is converted into a percentage mark which is rounded to the nearest
+         * whole number and is displayed.
+         *
+         * The student's percentage mark is saved in studentsMarks[i].
+         * studentsGrades[i] calls the function getGrade to identify the grade boundary which is then stored.
+         * */
             boolean scoreCheck = false;
             double score;
             while (scoreCheck == false) {
@@ -277,7 +296,7 @@ static int maxMark;
      * The function uses a switch statement to determine which grade is being passed in, and then calculates
      * and returns the percentage of students who received that grade. The percentage is calculated by dividing
      * the number of students who received that grade (looked up in the gradeCounts array) by the total number
-     * of students in the class (stored in the numStudents variable), and then multiplying by 100.
+     * of students in the class (stored in the numStudents variable), multiplying by 100 and rounded to 2 decimal places.
      * If the grade argument passed to the function is not one of the expected values ("A", "B", "C", "D", "F"), the function returns 0.0.
      */
     public static double getGradePercentage(String grade, int[] gradeCounts, int numStudents) {

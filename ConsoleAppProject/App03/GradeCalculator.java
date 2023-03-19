@@ -11,7 +11,7 @@ static int maxMark;
 
         /** Get number of students and maximum possible mark
          * At the beginning of hte program the user is prompted for the number of students.  This section of code
-         * validates that the number entered is an integer.
+         * validates that the number entered is an integer and a positive number.
          *
          * The user is then prompted for the maximum possible mark which is then validated to be an integer and is used
          * later to convert the student score into a percentage mark.
@@ -21,9 +21,12 @@ static int maxMark;
         while (true) {
             try {
                 numStudents = input.nextInt();
+                if (numStudents <= 0) {
+                    throw new InputMismatchException();
+                }
                 break;
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number");
+                System.out.println("Please enter a positive integer");
                 input.next();
             }
         }
@@ -33,9 +36,12 @@ static int maxMark;
         while (true) {
             try {
                 maxMark = input.nextInt();
+                if (maxMark <= 0) {
+                    throw new InputMismatchException();
+                }
                 break;
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a valid number");
+                System.out.println("Please enter a positive integer");
                 input.next();
             }
         }

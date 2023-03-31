@@ -47,16 +47,20 @@ namespace ConsoleAppProject.App04
         {
             Console.WriteLine();
             Console.WriteLine($"    Author: {Username}");
-            Console.WriteLine($"    Time Elpased: {FormatElapsedTime(Timestamp)}");
+            Console.WriteLine($"    Time Elapsed: {FormatElapsedTime(Timestamp)}");
             Console.WriteLine();
 
-            if (likes > 0)
+            if (likes == 0)
             {
-                Console.WriteLine($"    Likes:  {likes}  people like this.");
+                Console.WriteLine("    No likes.");
+            }
+            else if (likes == 1)
+            {
+                Console.WriteLine("    1 person likes this.");
             }
             else
             {
-                Console.WriteLine();
+                Console.WriteLine($"    {likes} people like this.");
             }
 
             if (comments.Count == 0)
@@ -65,7 +69,7 @@ namespace ConsoleAppProject.App04
             }
             else
             {
-                Console.WriteLine($"    {comments.Count}  comment(s). Click here to view.");
+                Console.WriteLine($"    {comments.Count} comment(s). Click here to view.");
             }
         }
 

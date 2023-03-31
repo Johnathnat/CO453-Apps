@@ -17,7 +17,7 @@ namespace ConsoleAppProject.App04
             string[] choices = new string[]
             {
                 "Post Message","Post Image", ""+
-                "Display All Posts","Quit"
+                "Display All Posts","Add Comments","Remove Post","Quit"
             };
             bool wantToQuit = false;
             do
@@ -28,10 +28,55 @@ namespace ConsoleAppProject.App04
                     case 1: PostMessage(); break;
                     case 2: PostImage(); break;
                     case 3: DisplayAll(); break;
-                    case 4: wantToQuit = true; break;
+                    case 4: AddComments(); break;
+                    case 5: RemovePost(); break;
+                    case 6: wantToQuit = true; break;
                 }
             } while (!wantToQuit);
 
+        }
+
+        private void RemovePost()
+        {
+            List<Post> allPosts = news.GetPosts();
+
+            if (allPosts.Count == 0)
+            {
+                Console.WriteLine("There are no posts to remove.");
+                return;
+            }
+
+            Console.WriteLine("Select a post to remove:");
+            for (int i = 0; i < allPosts.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {allPosts[i].ToString()}");
+            }
+            Console.WriteLine(allPosts.Count);
+            if (int.TryParse(Console.ReadLine(), out int postIndex))
+            {
+                // use postIndex variable here
+                // ...
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid integer.");
+            }
+
+            news.RemovePost(allPosts[postIndex - 1]);
+
+            Console.WriteLine("The post has been removed.");
+        }
+
+        private void AddComments()
+        {
+            Console.WriteLine("Enter the index of the post you want to comment on:");
+            int postIndex = ConsoleHelper.InputInterger("Post index: ", 1, (news.GetPosts().Count) - 1);
+
+            Console.WriteLine($"Enter your comment for post {postIndex + 1}:");
+            string comment = Console.ReadLine();
+
+            news.GetPosts()[postIndex].AddComment(comment);
+            Console.WriteLine("Comment added successfully!");
         }
 
         private void DisplayAll()

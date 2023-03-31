@@ -151,5 +151,22 @@ namespace ConsoleAppProject.Helpers
             Console.WriteLine("\n");
             Console.ResetColor();
         }
+
+        public static int InputInterger(string prompt, int min, int max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                if (int.TryParse(Console.ReadLine(), out int result))
+                {
+                    if (result >= min && result <= max)
+                    {
+                        return result;
+                    }
+                }
+                Console.WriteLine($"Please enter a number between {min} and {max}.");
+            }
+        }
+
     }
 }

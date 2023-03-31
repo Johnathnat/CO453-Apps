@@ -29,11 +29,35 @@ namespace ConsoleAppProject.App04
             posts.Add(photo);
         }
 
+        public List<Post> GetPosts()
+        {
+            return posts;
+        }
+
+        public void RemovePost(Post post)
+        {
+            posts.Remove(post);
+        }
+
+        public void AddCommentToPost(int postId, string commentText)
+        {
+            if (postId >= 0 && postId < posts.Count)
+            {
+                Post post = posts[postId];
+                post.AddComment(commentText);
+            }
+            else
+            {
+                Console.WriteLine($"Invalid post ID: {postId}");
+            }
+        }
+
         public void Display()
         {
             foreach (Post post in posts)
             {
                 post.Display();
+                Console.WriteLine();
                 Console.WriteLine();
             }
         }

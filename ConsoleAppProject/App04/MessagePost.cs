@@ -3,35 +3,29 @@ using System.Collections.Generic;
 
 namespace ConsoleAppProject.App04
 {
-    ///<summary>
-    /// This class stores information about a post in a social network. 
-    /// The main part of the post consists of a (possibly multi-line)
-    /// text message. Other data, such as author and time, are also stored.
+    /// <summary>
+    /// This class represents a message post in the news feed.
     /// </summary>
-    /// <author>
-    /// John Barker
-    /// version 0.1
-    /// </author>
     public class MessagePost : Post
     {
-        // an arbitrarily long, multi-line message
-        public String Message { get; }
-
+        // The message that will be posted
+        public string Message { get; set; }
 
         /// <summary>
         /// Constructor for objects of class MessagePost.
         /// </summary>
-        /// <param name="author">
-        /// The username of the author of this post.
-        /// </param>
-        /// <param name="text">
-        /// The text of this post.
-        /// </param>
-        public MessagePost(String author, String text): base(author)
+        public MessagePost(string author, string message) : base(author)
         {
-            Message = text;
-
+            Message = message;
         }
 
+        /// <summary>
+        /// Display the details of this message post.
+        /// </summary>
+        public override void Display()
+        {
+            base.Display();
+            Console.WriteLine("Message: " + Message);
+        }
     }
 }

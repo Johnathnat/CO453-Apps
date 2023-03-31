@@ -20,6 +20,7 @@ namespace ConsoleAppProject.App04
     ///</author> 
     public class NewsFeed
     {
+        public const string AUTHOR = "John";
         private readonly List<Post> posts;
 
         ///<summary>
@@ -28,6 +29,12 @@ namespace ConsoleAppProject.App04
         public NewsFeed()
         {
             posts = new List<Post>();
+
+            MessagePost post = new MessagePost(AUTHOR, "I am confused");
+            AddMessagePost(post);
+
+            PhotoPost photoPost = new PhotoPost(AUTHOR, "Image1.png", "Image one caption");
+            AddPhotoPost(photoPost);
         }
 
 
@@ -52,18 +59,126 @@ namespace ConsoleAppProject.App04
         }
 
         ///<summary>
-        /// Show the news feed. Currently: print the news feed details to the
-        /// terminal. (To do: replace this later with display in web browser.)
+        /// Add a comment to the post with the specified ID.
+        ///</summary>
+        public void AddComment(int postId)
+        {
+            Console.WriteLine($"Enter a comment for post ID {postId}:");
+            string comment = Console.ReadLine();
+
+            Post post = GetPostById(postId);
+            if (post == null)
+            {
+                Console.WriteLine($"Post with ID {postId} not found.");
+            }
+            else if (post is not ICommentable)
+            {
+                Console.WriteLine("This post cannot have comments.");
+            }
+            else
+            {
+                ((ICommentable)post).AddComment(comment);
+                Console.WriteLine("Comment added successfully.");
+            }
+        }
+
+        ///<summary>
+        /// Like the post with the specified ID.
+        ///</summary>
+        public void LikePost(int postId)
+        {
+            Post post = GetPostById(postId);
+            if (post == null)
+            {
+                Console.WriteLine($"Post with ID {postId} not found.");
+            }
+            else
+            {
+                post.Like();
+                Console.WriteLine("Post liked successfully.");
+            }
+        }
+
+        ///<summary>
+        /// Unlike the post with the specified ID.
+        ///</summary>
+        public void UnlikePost(int postId, string username)
+        {
+            foreach (Post post in posts)
+            {
+                if (post.PostId == postId)
+                {
+                    if (post is IPostWithLikes)
+                    {
+                        IPostWithLikes postWithLikes = (IPostWithLikes)post;
+                        postWithLikes.RemoveLike(username);
+                        Console.WriteLine($"Post {postId} unliked by {username}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: Post {postId} cannot be liked");
+                    }
+                    return;
+                }
+            }
+            Console.WriteLine($"Error: Post {postId} not found");
+        }
+
+        public void RemovePost(Post post)
+        {
+            if (posts.Contains(post))
+            {
+                posts.Remove(post);
+                Console.WriteLine("Post removed successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Error: post not found.");
+            }
+        }
+
+        ///<summary>
+        /// Show all posts in the news feed.
         ///</summary>
         public void Display()
         {
-            // display all text posts
+            Console.WriteLine("   John's News Feed");
+            Console.WriteLine("-------------------------");
+
             foreach (Post post in posts)
             {
                 post.Display();
-                Console.WriteLine();   // empty line between posts
+                Console.WriteLine(); // empty line between posts
             }
         }
-    }
 
+        ///<summary>
+        /// Show all posts in the news feed that were posted by a specific author.
+        /// 
+        /// @param author  The author whose posts to display.
+        ///</summary>
+        public void DisplayByAuthor(string author)
+        {
+            Console.WriteLine($"   John's News Feed - Posts by {author}");
+            Console.WriteLine("--------------------------------------------");
+
+            bool authorFound = false;
+
+            foreach (Post post in posts)
+            {
+                if (post.Username == author)
+                {
+                    post.Display();
+                    Console.WriteLine(); // empty line between posts
+                    authorFound = true;
+                }
+            }
+
+            if (!authorFound)
+            {
+                Console.WriteLine($"No posts found by {author}.");
+            }
+        }
+
+    }
 }

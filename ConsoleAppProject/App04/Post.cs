@@ -7,15 +7,17 @@ namespace ConsoleAppProject.App04
 {
     public class Post
     {
+        //Number of likes
         private int likes;
-
-
+        //List of comments
         private readonly List<String> comments;
-
-        public String Username { get; } // username of the post's author
-
+        
+        // username of the post's author
+        public String Username { get; } 
+        //Time and date of post
         public DateTime Timestamp { get; }
 
+        //The metadata of the post
         public Post(string author)
         {
             this.Username = author;
@@ -25,11 +27,12 @@ namespace ConsoleAppProject.App04
             comments = new List<String>();
         }
 
+        //like addition
         public void Like()
         {
             likes++;
         }
-
+        //like subtraction. Wont go below 0
         public void Unlike()
         {
             if (likes > 0)
@@ -38,12 +41,16 @@ namespace ConsoleAppProject.App04
             }
         }
 
-        public void AddComment(String text) // Add a comment to this post.
+
+        // Add a comment to this post.
+        public void AddComment(String text) 
         {
             comments.Add(text);
         }
 
-        public virtual void Display() // Display the details of this post.
+
+        // Display the details of this post in a userfriednly way.
+        public virtual void Display() 
         {
             Console.WriteLine();
             Console.WriteLine($"    Author: {Username}");
@@ -73,7 +80,8 @@ namespace ConsoleAppProject.App04
             }
         }
 
-        private String FormatElapsedTime(DateTime time) // Create a string describing a time point in the past in terms relative to current time, such as "30 seconds ago" or "7 minutes ago".
+        // Create a string describing a time point in the past in terms relative to current time, such as "30 seconds ago" or "7 minutes ago".
+        private String FormatElapsedTime(DateTime time) 
         {
             DateTime current = DateTime.Now;
             TimeSpan timePast = current - time;

@@ -41,9 +41,10 @@ namespace ConsoleAppProject.App04
 
         public void AddCommentToPost(int postId, string commentText)
         {
+
             if (postId >= 0 && postId < posts.Count)
             {
-                Post post = posts[postId];
+                Post post = posts[postId - 1];
                 post.AddComment(commentText);
             }
             else
@@ -52,14 +53,75 @@ namespace ConsoleAppProject.App04
             }
         }
 
+        public void LikePost(int index)
+        {
+            if (index < 0 || index >= posts.Count)
+            {
+                Console.WriteLine("Invalid post index.");
+                return;
+            }
+
+            posts[index].Like();
+            Console.WriteLine($"Post {index+1} liked.");
+        }
+
+        public void UnlikePost(int index)
+        {
+            if (index < 0 || index >= posts.Count)
+            {
+                Console.WriteLine("Invalid post index.");
+                return;
+            }
+
+            posts[index].Unlike();
+            Console.WriteLine($"Post {index+1} unliked.");
+        }
+
+        public List<Post> GetPostsByAuthor(string author)
+        {
+            List<Post> filteredPosts = new List<Post>();
+
+            foreach (var post in posts)
+            {
+                if (post.Username == author)
+                {
+                    filteredPosts.Add(post);
+                }
+            }
+
+            return filteredPosts;
+        }
+
         public void Display()
         {
-            foreach (Post post in posts)
+            Console.WriteLine("All posts:\n");
+
+            for (int i = 0; i < posts.Count; i++)
             {
-                post.Display();
-                Console.WriteLine();
+                Console.WriteLine($"Post No {i + 1}. ");
+                posts[i].Display();
                 Console.WriteLine();
             }
         }
+
+        public void FilterdDisplay(List<Post> posts)
+        {
+            Console.WriteLine("\nFiltered Posts:");
+
+            if (posts.Count == 0)
+            {
+                Console.WriteLine("No posts to display.");
+            }
+            else
+            {
+                int i = 1;
+                foreach (Post post in posts)
+                {
+                    Console.WriteLine($"[{i}] {post}");
+                    i++;
+                }
+            }
+        }
+
     }
 }

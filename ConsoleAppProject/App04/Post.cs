@@ -25,12 +25,12 @@ namespace ConsoleAppProject.App04
             comments = new List<String>();
         }
 
-        public void Like() // Record one more 'Like' indication from a user.
+        public void Like()
         {
             likes++;
         }
 
-        public void Unlike() // Record that a user has withdrawn his/her 'Like' vote.
+        public void Unlike()
         {
             if (likes > 0)
             {

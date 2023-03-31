@@ -17,7 +17,7 @@ namespace ConsoleAppProject.App04
             string[] choices = new string[]
             {
                 "Post Message","Post Image", ""+
-                "Display All Posts","Add Comments","Remove Post","Quit"
+                "Display All Posts","Add Comments","Remove Post","Like Post","Unlike Post","Display posts by author","Quit"
             };
             bool wantToQuit = false;
             do
@@ -30,10 +30,49 @@ namespace ConsoleAppProject.App04
                     case 3: DisplayAll(); break;
                     case 4: AddComments(); break;
                     case 5: RemovePost(); break;
-                    case 6: wantToQuit = true; break;
+                    case 6: LikePost(); break;
+                    case 7: UnlikePost(); break;
+                    case 8: SortByAuthor(); break;
+                    case 9: wantToQuit = true; break;
                 }
             } while (!wantToQuit);
 
+        }
+
+        private void SortByAuthor()
+        {
+            Console.Write("Enter the author's username: ");
+            string author = Console.ReadLine();
+
+            List<Post> filteredPosts = news.GetPostsByAuthor(author);
+
+            if (filteredPosts.Count == 0)
+            {
+                Console.WriteLine($"No posts found by author {author}.");
+            }
+            else
+            {
+                Console.WriteLine($"Showing {filteredPosts.Count} post(s) by {author}:");
+                news.FilterdDisplay(filteredPosts);
+            }
+        }
+
+        public void LikePost()
+        {
+            Console.WriteLine("Enter the index of the post you want to like:");
+            int postIndex = ConsoleHelper.InputInterger("Post index: ", 1, news.GetPosts().Count) - 1;
+
+            news.LikePost(postIndex);
+            Console.WriteLine("Post liked successfully!");
+        }
+
+        public void UnlikePost()
+        {
+            Console.WriteLine("Enter the index of the post you want to unlike:");
+            int postIndex = ConsoleHelper.InputInterger("Post index: ", 1, news.GetPosts().Count) - 1;
+
+            news.UnlikePost(postIndex);
+            Console.WriteLine("Post unliked successfully!");
         }
 
         private void RemovePost()
@@ -69,8 +108,9 @@ namespace ConsoleAppProject.App04
 
         private void AddComments()
         {
+
             Console.WriteLine("Enter the index of the post you want to comment on:");
-            int postIndex = ConsoleHelper.InputInterger("Post index: ", 1, (news.GetPosts().Count) - 1);
+            int postIndex = ConsoleHelper.InputInterger("Post index: ", 1, news.GetPosts().Count) - 1;
 
             Console.WriteLine($"Enter your comment for post {postIndex + 1}:");
             string comment = Console.ReadLine();
@@ -78,6 +118,8 @@ namespace ConsoleAppProject.App04
             news.GetPosts()[postIndex].AddComment(comment);
             Console.WriteLine("Comment added successfully!");
         }
+
+
 
         private void DisplayAll()
         {
@@ -92,8 +134,8 @@ namespace ConsoleAppProject.App04
             Console.WriteLine("Enter a caption for the image:");
             string caption = Console.ReadLine();
 
-            string author = "John"; // Replace with the actual author's name
-
+            Console.WriteLine("Enter Authers Name:");
+            string author = Console.ReadLine();
             PhotoPost photoPost = new PhotoPost(author, fileName, caption);
             news.AddPhotoPost(photoPost);
 
@@ -104,7 +146,10 @@ namespace ConsoleAppProject.App04
         {
             Console.WriteLine("Enter your message:");
             string newMessage = Console.ReadLine();
-            string author = "John"; // Replace with the actual author's name
+
+
+            Console.WriteLine("Enter Authers Name:");
+            string author = Console.ReadLine(); 
 
             MessagePost post = new MessagePost(author, newMessage);
             news.AddMessagePost(post);

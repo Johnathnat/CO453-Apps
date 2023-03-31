@@ -1,100 +1,90 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ConsoleAppProject.App04
 {
-    ///<summary>
-    /// This is an abstract class to represent a post in a social network application.
-    /// 
-    /// Display of the post is currently simulated by printing the details to the
-    /// terminal. (Later, this should display in a browser.)
-    ///</summary>
-    ///<author>
-    ///  Michael Kölling and David J. Barnes
-    ///  version 0.2
-    ///</author> 
-    public abstract class Post
+    public class Post
     {
-        private readonly int postID;
-        private static int instances = 0;
+        private int likes;
 
-        public string Username { get; }
+
+        private readonly List<String> comments;
+
+        public String Username { get; } // username of the post's author
 
         public DateTime Timestamp { get; }
 
-        public int Likes { get; private set; }
-
-        private readonly List<Comment> comments;
-
-        ///<summary>
-        /// Constructor for objects of class Post.
-        ///</summary>
-        ///<param name="author">The username of the author of this post.</param>
         public Post(string author)
         {
-            Username = author;
+            this.Username = author;
             Timestamp = DateTime.Now;
 
-            postID = ++instances;
-
-            comments = new List<Comment>();
+            likes = 0;
+            comments = new List<String>();
         }
 
-        ///<summary>
-        /// Add a comment to this post.
-        /// 
-        /// @param commentText  The text of the comment to be added.
-        /// @param username     The username of the author of the comment.
-        ///</summary>
-        public void AddComment(string commentText, string username)
+        public void Like() // Record one more 'Like' indication from a user.
         {
-            Comment comment = new Comment(commentText, username);
-            comments.Add(comment);
+            likes++;
         }
 
-        ///<summary>
-        /// Increase the number of likes for this post by 1.
-        ///</summary>
-        public void Like()
+        public void Unlike() // Record that a user has withdrawn his/her 'Like' vote.
         {
-            Likes++;
-        }
-
-        ///<summary>
-        /// Decrease the number of likes for this post by 1.
-        ///</summary>
-        public void Unlike()
-        {
-            if (Likes > 0)
+            if (likes > 0)
             {
-                Likes--;
+                likes--;
             }
         }
 
-        ///<summary>
-        /// Display the details of this post.
-        /// 
-        /// This will display the username of the author, the timestamp of the post,
-        /// the number of likes, and the comments associated with the post.
-        /// 
-        /// This is an abstract method. Subclasses will need to provide their own implementation
-        /// of the Display method.
-        ///</summary>
-        public abstract void Display();
-
-        ///<summary>
-        /// Return a string representation of this post.
-        ///</summary>
-        public override string ToString()
+        public void AddComment(String text) // Add a comment to this post.
         {
-            string output = $"ID: {postID}\n" +
-                            $"Author: {Username}\n" +
-                            $"Timestamp: {Timestamp}\n" +
-                            $"Likes: {Likes}\n" +
-                            $"Comments: {comments.Count}";
+            comments.Add(text);
+        }
 
-            return output;
+        public virtual void Display() // Display the details of this post.
+        {
+            Console.WriteLine();
+            Console.WriteLine($"    Author: {Username}");
+            Console.WriteLine($"    Time Elpased: {FormatElapsedTime(Timestamp)}");
+            Console.WriteLine();
+
+            if (likes > 0)
+            {
+                Console.WriteLine($"    Likes:  {likes}  people like this.");
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+
+            if (comments.Count == 0)
+            {
+                Console.WriteLine("    No comments.");
+            }
+            else
+            {
+                Console.WriteLine($"    {comments.Count}  comment(s). Click here to view.");
+            }
+        }
+
+        private String FormatElapsedTime(DateTime time) // Create a string describing a time point in the past in terms relative to current time, such as "30 seconds ago" or "7 minutes ago".
+        {
+            DateTime current = DateTime.Now;
+            TimeSpan timePast = current - time;
+
+            long seconds = (long)timePast.TotalSeconds;
+            long minutes = seconds / 60;
+
+            if (minutes > 0)
+            {
+                return minutes + " minutes ago";
+            }
+            else
+            {
+                return seconds + " seconds ago";
+            }
         }
     }
 }
